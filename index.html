@@ -6,14 +6,17 @@
   <title>World Clock</title>
   <style>
     :root {
-      --bg: #000000;
-      --panel: #070707;
-      --panel-soft: #0d0d0d;
-      --text: #f2f2f2;
-      --muted: #9b9b9b;
-      --dim: #252525;
-      --border: #1c1c1c;
-      --danger: #ff5c5c;
+      --page-bg: #f4f4f4;
+      --panel-bg: #ffffff;
+      --card-bg: #f7f7f7;
+      --text: #171717;
+      --muted: #666666;
+      --soft-muted: #9a9a9a;
+      --border: #e5e5e5;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+      --red: #d0121b;
+      --red-soft: rgba(208, 18, 27, 0.12);
+      --ring-bg: #e9e9e9;
     }
 
     * {
@@ -24,220 +27,327 @@
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at top, #090909 0%, #000 55%, #000 100%);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.95), transparent 34%),
+        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.9), transparent 30%),
+        var(--page-bg);
       color: var(--text);
-      font-family: "Courier New", Courier, monospace;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       display: flex;
       justify-content: center;
-      padding: 32px 16px;
+      padding: 30px 16px 56px;
     }
 
     .app {
-      width: min(1120px, 100%);
+      width: min(1180px, 100%);
     }
 
     header {
+      width: min(760px, 100%);
+      margin: 0 auto 38px;
+      padding: 28px 34px;
       text-align: center;
-      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
 
     .date-line {
-      letter-spacing: 6px;
       color: var(--muted);
-      font-size: 13px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      font-size: clamp(18px, 2.2vw, 27px);
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      margin-bottom: 5px;
+      text-transform: none;
     }
 
     .main-clock {
-      font-size: clamp(54px, 12vw, 132px);
-      line-height: 0.9;
-      letter-spacing: 4px;
       color: var(--text);
-      text-shadow: 0 0 12px rgba(255,255,255,0.12);
-      font-weight: 700;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-shadow: none;
+      margin-top: 6px;
     }
 
     .main-clock span.dim {
-      color: var(--dim);
+      color: var(--text);
     }
 
     .subline {
-      margin-top: 12px;
-      color: var(--muted);
-      letter-spacing: 3px;
-      font-size: 12px;
-      text-transform: uppercase;
+      margin-top: 22px;
+      color: var(--text);
+      font-size: clamp(17px, 2vw, 25px);
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      text-transform: none;
     }
 
     .controls {
+      width: min(760px, 100%);
+      margin: 0 auto 16px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 18px;
       padding: 14px;
-      margin-bottom: 18px;
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
 
     input, button {
-      background: #050505;
+      min-height: 48px;
+      background: #ffffff;
       border: 1px solid var(--border);
       color: var(--text);
       font-family: inherit;
       border-radius: 12px;
-      padding: 12px 13px;
+      padding: 12px 14px;
       outline: none;
-      font-size: 14px;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: var(--soft-muted);
     }
 
     input:focus {
-      border-color: #555;
+      border-color: var(--red);
+      box-shadow: 0 0 0 4px var(--red-soft);
     }
 
     button {
       cursor: pointer;
       transition: 0.2s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      background: var(--text);
+      color: #ffffff;
+      font-weight: 700;
       white-space: nowrap;
     }
 
     button:hover {
-      background: #111;
-      border-color: #444;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
     }
 
     .message {
       min-height: 20px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 13px;
       text-align: center;
-      letter-spacing: 1px;
-      margin-bottom: 18px;
+      letter-spacing: 0.1px;
+      margin-bottom: 34px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+      gap: 28px;
+      align-items: stretch;
     }
 
     .clock-card {
-      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-soft) 100%);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
+      min-height: 310px;
+      background: transparent;
+      border: 0;
+      border-radius: 22px;
+      padding: 0;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+      cursor: grab;
+    }
+
+    .clock-card.dragging {
+      opacity: 0.45;
+    }
+
+    .clock-card:active {
+      cursor: grabbing;
     }
 
     .clock-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.035), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.8s ease;
-    }
-
-    .clock-card:hover::before {
-      transform: translateX(100%);
+      display: none;
     }
 
     .city-row {
+      min-height: 78px;
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: center;
+      gap: 16px;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      text-align: center;
       position: relative;
-      z-index: 1;
+      z-index: 2;
+    }
+
+    .city-row > div:first-child {
+      padding: 0 42px;
     }
 
     .city {
-      font-size: 18px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+      text-transform: none;
     }
 
-    .country, .zone {
+    .country {
       color: var(--muted);
-      font-size: 12px;
+      font-size: 14px;
       margin-top: 4px;
-      letter-spacing: 1px;
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .zone {
+      display: none;
+    }
+
+    .city-row > div:last-child {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
     .drag-handle {
+      width: 34px;
+      height: 34px;
       border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.8);
       color: var(--muted);
-      padding: 7px 10px;
-      font-size: 14px;
-      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      border-radius: 50%;
       cursor: grab;
       user-select: none;
-      position: relative;
-      z-index: 1;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
     .drag-handle:active {
       cursor: grabbing;
     }
 
-    .clock-card.dragging {
-      opacity: 0.45;
-      border-color: #555;
+    .delete-btn {
+      min-height: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--red);
+      padding: 0 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
-    .delete-btn {
-      border: 1px solid rgba(255,92,92,0.25);
-      color: var(--danger);
-      padding: 7px 10px;
-      font-size: 11px;
-      border-radius: 9px;
+    .delete-btn:hover {
+      color: #ffffff;
+      background: var(--red);
+      border-color: var(--red);
+      transform: translateY(-1px);
     }
 
     .time {
-      font-size: 38px;
-      font-weight: 700;
-      letter-spacing: 3px;
+      width: 220px;
+      height: 220px;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 400;
+      letter-spacing: -1.5px;
       position: relative;
       z-index: 1;
+      /* Pitch black ring with small gap */
+      background:
+        radial-gradient(circle, #ffffff 62%, transparent 63%),
+        conic-gradient(#000000 0deg 345deg, transparent 345deg 360deg);
+      box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    .time::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 0;
+      pointer-events: none;
+    }
+
+    .time::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(230, 230, 230, 0.9);
+      pointer-events: none;
     }
 
     .date {
       color: var(--muted);
-      font-size: 12px;
-      margin-top: 8px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      font-size: 14px;
+      margin-top: 14px;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: none;
       position: relative;
       z-index: 1;
     }
 
     .empty {
       display: none;
+      width: min(760px, 100%);
+      margin: 0 auto;
       border: 1px dashed var(--border);
+      background: rgba(255, 255, 255, 0.7);
       border-radius: 18px;
       padding: 28px;
       text-align: center;
       color: var(--muted);
-      letter-spacing: 1px;
+      letter-spacing: 0.1px;
+      box-shadow: var(--shadow);
     }
 
     @media (max-width: 720px) {
       body {
-        padding: 22px 12px;
+        padding: 20px 12px 40px;
+      }
+
+      header {
+        padding: 22px 18px;
       }
 
       .controls {
         grid-template-columns: 1fr;
       }
 
-      .main-clock {
-        letter-spacing: 1px;
+      .grid {
+        gap: 34px;
+      }
+
+      .clock-card {
+        min-height: 300px;
+      }
+
+      .time {
+        width: 205px;
+        height: 205px;
       }
     }
   </style>
@@ -422,8 +532,8 @@
               <div class="city">${escapeHTML(clock.capital)}</div>
               <div class="country">${escapeHTML(clock.country)}</div>
               <div class="zone">${escapeHTML(clock.zone)}</div>
-            </div>            <div>
-              <div class="drag-handle" title="Drag to reorder">☰</div>
+            </div>
+            <div>
               <button class="delete-btn" data-index="${index}">Delete</button>
             </div>
           </div>
