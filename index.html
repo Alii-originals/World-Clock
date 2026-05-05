@@ -1,303 +1,778 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Clock</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Clock</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
-<style>
-:root{
---bg1:#6f8faa;
---bg2:#8fb3c9;
---card:#ffffff;
---text:#0b1a2b;
---muted:#6b7a90;
---border:#dbeafe;
---track:#e5e7eb;
-}
+  <style>
+    :root {
+      --bg-one: #6f8faa;
+      --bg-two: #8fb3c9;
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --text: #0b1a2b;
+      --muted: #64748b;
+      --border: rgba(219, 234, 254, 0.9);
+      --track: #e5e7eb;
+      --ring: #050505;
+      --shadow: 0 18px 38px rgba(15, 23, 42, 0.14);
+      --soft-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.14);
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body{
-font-family:Inter,system-ui;
-background:linear-gradient(135deg,var(--bg1),var(--bg2));
-display:flex;
-justify-content:center;
-padding:20px;
-color:var(--text);
-}
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 32%),
+        linear-gradient(135deg, var(--bg-one), var(--bg-two));
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px 48px;
+    }
 
-.app{width:100%;max-width:1100px}
+    .app {
+      width: min(1180px, 100%);
+    }
 
-header{
-text-align:center;
-margin-bottom:16px;
-}
+    .title {
+      font-family: "Pacifico", cursive;
+      color: #ffffff;
+      text-align: center;
+      font-size: clamp(38px, 7vw, 74px);
+      line-height: 1.05;
+      margin: 10px 0 22px;
+      text-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+    }
 
-.title{
-font-family:'Pacifico',cursive;
-font-size:36px;
-color:white;
-margin-bottom:10px;
-}
+    header {
+      width: min(760px, 100%);
+      margin: 0 auto 18px;
+      padding: 18px 22px;
+      text-align: center;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
 
-.header-box{
-background:rgba(255,255,255,0.9);
-padding:14px;
-border-radius:14px;
-border:1px solid var(--border);
-}
+    .date-line {
+      color: var(--muted);
+      font-size: clamp(15px, 2vw, 20px);
+      margin-bottom: 4px;
+    }
 
-.date-line{
-color:var(--muted);
-font-size:14px;
-margin-bottom:4px;
-}
+    .main-clock {
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
 
-.main-clock{
-font-size:30px;
-font-weight:700;
-}
+    .subline {
+      color: var(--muted);
+      font-size: clamp(13px, 1.7vw, 16px);
+      margin-top: 4px;
+    }
 
-.subline{
-font-size:13px;
-color:var(--muted);
-}
+    .controls {
+      width: min(820px, 100%);
+      margin: 0 auto 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
 
-.controls{
-display:flex;
-gap:10px;
-background:white;
-padding:10px;
-border-radius:12px;
-border:1px solid var(--border);
-margin-bottom:12px;
-}
+    input, button {
+      min-height: 48px;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+    }
 
-input{
-flex:1;
-padding:10px;
-border-radius:8px;
-border:1px solid var(--border);
-}
+    input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      padding: 11px 14px;
+    }
 
-button{
-padding:10px 14px;
-background:#0b1a2b;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
+    input::placeholder {
+      color: #94a3b8;
+    }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:12px;
-}
+    input:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px var(--blue-soft);
+    }
 
-.clock-card{
-background:white;
-padding:12px;
-border-radius:12px;
-border:1px solid var(--border);
-text-align:center;
-}
+    button {
+      border: 0;
+      background: #0b1a2b;
+      color: #ffffff;
+      padding: 0 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      white-space: nowrap;
+    }
 
-.city{font-weight:700;font-size:16px}
-.country{font-size:12px;color:var(--muted)}
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+    }
 
-.time{
-width:130px;
-height:130px;
-margin:10px auto;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
-font-weight:600;
-background:white;
-}
+    .message {
+      min-height: 22px;
+      color: rgba(255, 255, 255, 0.92);
+      text-align: center;
+      font-size: 14px;
+      margin: 12px 0 24px;
+      text-shadow: 0 1px 8px rgba(15, 23, 42, 0.16);
+    }
 
-.time::before{
-content:"";
-position:absolute;
-inset:0;
-border-radius:50%;
-background:conic-gradient(#000 var(--angle), var(--track) var(--angle));
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
 
-.time::after{
-content:"";
-position:absolute;
-inset:12px;
-border-radius:50%;
-background:white;
-}
+    .clock-card {
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 16px 12px 18px;
+      text-align: center;
+      box-shadow: var(--soft-shadow);
+      cursor: grab;
+      min-height: 286px;
+    }
 
-.time span{
-position:relative;
-z-index:2;
-}
+    .clock-card.dragging {
+      opacity: 0.45;
+    }
 
-.date{
-font-size:12px;
-color:var(--muted);
-margin-top:6px;
-}
-</style>
+    .clock-card:active {
+      cursor: grabbing;
+    }
+
+    .card-top {
+      min-height: 72px;
+      position: relative;
+      padding: 0 52px;
+      margin-bottom: 8px;
+    }
+
+    .city {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.18;
+      word-break: break-word;
+    }
+
+    .country {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+      text-transform: capitalize;
+      word-break: break-word;
+    }
+
+    .delete-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--blue);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .delete-btn:hover {
+      background: var(--blue);
+      color: #ffffff;
+    }
+
+    .time {
+      width: 150px;
+      height: 150px;
+      margin: 8px auto 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      background: conic-gradient(var(--ring) var(--angle, 0deg), var(--track) var(--angle, 0deg) 360deg);
+    }
+
+    .time::after {
+      content: "";
+      position: absolute;
+      inset: 13px;
+      border-radius: 50%;
+      background: #ffffff;
+      z-index: 1;
+    }
+
+    .time span {
+      position: relative;
+      z-index: 2;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .empty {
+      display: none;
+      width: min(760px, 100%);
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px dashed var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      box-shadow: var(--soft-shadow);
+    }
+
+    @media (min-width: 1000px) {
+      .grid {
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 14px;
+      }
+
+      .clock-card {
+        min-height: 270px;
+        padding: 14px 10px 16px;
+      }
+
+      .time {
+        width: 138px;
+        height: 138px;
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 16px 12px 40px;
+      }
+
+      .title {
+        margin-top: 4px;
+        margin-bottom: 16px;
+      }
+
+      header {
+        padding: 16px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .clock-card {
+        min-height: 278px;
+      }
+
+      .time {
+        width: 148px;
+        height: 148px;
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="app">
+  <main class="app">
+    <div class="title">World Clock</div>
 
-<header>
-<div class="title">World Clock</div>
+    <header>
+      <div class="date-line" id="localDate">Loading date</div>
+      <div class="main-clock" id="mainClock">00:00:00</div>
+      <div class="subline" id="deviceLine">Loading location</div>
+    </header>
 
-<div class="header-box">
-<div id="localDate" class="date-line"></div>
-<div id="mainClock" class="main-clock"></div>
-<div id="deviceLine" class="subline"></div>
-</div>
-</header>
+    <section class="controls">
+      <input id="searchInput" placeholder="Type country or city, for example KSA or Jeddah" autocomplete="off" />
+      <button id="addBtn">Add Clock</button>
+    </section>
 
-<div class="controls">
-<input id="input" placeholder="Type country or city (e.g. KSA or Jeddah)">
-<button onclick="addClock()">Add Clock</button>
-</div>
+    <div class="message" id="message">Loading global city search...</div>
+    <section class="empty" id="emptyState">No clocks added yet.</section>
+    <section class="grid" id="grid"></section>
+  </main>
 
-<div id="grid" class="grid"></div>
+  <script src="https://cdn.jsdelivr.net/npm/tz-lookup@6.1.25/tz.js"></script>
 
-</div>
+  <script>
+    const STORAGE_KEY = "world_clock_global_v1";
 
-<script>
+    const searchInput = document.getElementById("searchInput");
+    const addBtn = document.getElementById("addBtn");
+    const grid = document.getElementById("grid");
+    const message = document.getElementById("message");
+    const emptyState = document.getElementById("emptyState");
+    const localDate = document.getElementById("localDate");
+    const mainClock = document.getElementById("mainClock");
+    const deviceLine = document.getElementById("deviceLine");
 
-const STORAGE="clocks_final";
+    let draggedIndex = null;
+    let clocks = loadClocks();
 
-/* COUNTRY SHORT FORMS */
-const countryMap={
-"ksa":{c:"Saudi Arabia",city:"Riyadh",z:"Asia/Riyadh"},
-"saudi arabia":{c:"Saudi Arabia",city:"Riyadh",z:"Asia/Riyadh"},
-"uae":{c:"UAE",city:"Abu Dhabi",z:"Asia/Dubai"},
-"united arab emirates":{c:"UAE",city:"Abu Dhabi",z:"Asia/Dubai"},
-"usa":{c:"USA",city:"Washington",z:"America/New_York"},
-"uk":{c:"UK",city:"London",z:"Europe/London"},
-"india":{c:"India",city:"New Delhi",z:"Asia/Kolkata"}
-};
+    const countryShortForms = {
+      "ksa": { label: "Saudi Arabia", capital: "Riyadh", query: "Riyadh, Saudi Arabia" },
+      "sa": { label: "Saudi Arabia", capital: "Riyadh", query: "Riyadh, Saudi Arabia" },
+      "uae": { label: "United Arab Emirates", capital: "Abu Dhabi", query: "Abu Dhabi, United Arab Emirates" },
+      "ae": { label: "United Arab Emirates", capital: "Abu Dhabi", query: "Abu Dhabi, United Arab Emirates" },
+      "usa": { label: "United States", capital: "Washington, D.C.", query: "Washington DC, United States" },
+      "us": { label: "United States", capital: "Washington, D.C.", query: "Washington DC, United States" },
+      "uk": { label: "United Kingdom", capital: "London", query: "London, United Kingdom" },
+      "gb": { label: "United Kingdom", capital: "London", query: "London, United Kingdom" },
+      "u.k.": { label: "United Kingdom", capital: "London", query: "London, United Kingdom" },
+      "u.s.a.": { label: "United States", capital: "Washington, D.C.", query: "Washington DC, United States" }
+    };
 
-/* CITY FALLBACK */
-const cityDB={
-"manchester":"Europe/London",
-"birmingham":"Europe/London",
-"jeddah":"Asia/Riyadh",
-"dubai":"Asia/Dubai",
-"mumbai":"Asia/Kolkata",
-"delhi":"Asia/Kolkata",
-"new york":"America/New_York",
-"los angeles":"America/Los_Angeles",
-"chicago":"America/Chicago"
-};
+    const countryCapitalHints = {
+      "saudi arabia": { label: "Saudi Arabia", capital: "Riyadh", query: "Riyadh, Saudi Arabia" },
+      "united arab emirates": { label: "United Arab Emirates", capital: "Abu Dhabi", query: "Abu Dhabi, United Arab Emirates" },
+      "united states": { label: "United States", capital: "Washington, D.C.", query: "Washington DC, United States" },
+      "united states of america": { label: "United States", capital: "Washington, D.C.", query: "Washington DC, United States" },
+      "united kingdom": { label: "United Kingdom", capital: "London", query: "London, United Kingdom" },
+      "great britain": { label: "United Kingdom", capital: "London", query: "London, United Kingdom" },
+      "india": { label: "India", capital: "New Delhi", query: "New Delhi, India" },
+      "pakistan": { label: "Pakistan", capital: "Islamabad", query: "Islamabad, Pakistan" },
+      "qatar": { label: "Qatar", capital: "Doha", query: "Doha, Qatar" },
+      "france": { label: "France", capital: "Paris", query: "Paris, France" },
+      "germany": { label: "Germany", capital: "Berlin", query: "Berlin, Germany" },
+      "russia": { label: "Russia", capital: "Moscow", query: "Moscow, Russia" },
+      "canada": { label: "Canada", capital: "Ottawa", query: "Ottawa, Canada" },
+      "australia": { label: "Australia", capital: "Canberra", query: "Canberra, Australia" },
+      "japan": { label: "Japan", capital: "Tokyo", query: "Tokyo, Japan" },
+      "china": { label: "China", capital: "Beijing", query: "Beijing, China" },
+      "malaysia": { label: "Malaysia", capital: "Kuala Lumpur", query: "Kuala Lumpur, Malaysia" },
+      "singapore": { label: "Singapore", capital: "Singapore", query: "Singapore" },
+      "south africa": { label: "South Africa", capital: "Pretoria", query: "Pretoria, South Africa" }
+    };
 
-const zones=Intl.supportedValuesOf("timeZone");
-let clocks=JSON.parse(localStorage.getItem(STORAGE)||"[]");
+    const cityOverrides = {
+      "jeddah": { city: "Jeddah", country: "Saudi Arabia", zone: "Asia/Riyadh" },
+      "makkah": { city: "Makkah", country: "Saudi Arabia", zone: "Asia/Riyadh" },
+      "mecca": { city: "Makkah", country: "Saudi Arabia", zone: "Asia/Riyadh" },
+      "madinah": { city: "Madinah", country: "Saudi Arabia", zone: "Asia/Riyadh" },
+      "medina": { city: "Madinah", country: "Saudi Arabia", zone: "Asia/Riyadh" },
+      "manchester": { city: "Manchester", country: "United Kingdom", zone: "Europe/London" },
+      "birmingham": { city: "Birmingham", country: "United Kingdom", zone: "Europe/London" },
+      "leeds": { city: "Leeds", country: "United Kingdom", zone: "Europe/London" },
+      "liverpool": { city: "Liverpool", country: "United Kingdom", zone: "Europe/London" },
+      "glasgow": { city: "Glasgow", country: "United Kingdom", zone: "Europe/London" },
+      "edinburgh": { city: "Edinburgh", country: "United Kingdom", zone: "Europe/London" },
+      "dubai": { city: "Dubai", country: "United Arab Emirates", zone: "Asia/Dubai" },
+      "abu dhabi": { city: "Abu Dhabi", country: "United Arab Emirates", zone: "Asia/Dubai" },
+      "sharjah": { city: "Sharjah", country: "United Arab Emirates", zone: "Asia/Dubai" },
+      "mumbai": { city: "Mumbai", country: "India", zone: "Asia/Kolkata" },
+      "delhi": { city: "Delhi", country: "India", zone: "Asia/Kolkata" },
+      "new delhi": { city: "New Delhi", country: "India", zone: "Asia/Kolkata" },
+      "hyderabad": { city: "Hyderabad", country: "India", zone: "Asia/Kolkata" },
+      "bangalore": { city: "Bangalore", country: "India", zone: "Asia/Kolkata" },
+      "bengaluru": { city: "Bengaluru", country: "India", zone: "Asia/Kolkata" },
+      "karachi": { city: "Karachi", country: "Pakistan", zone: "Asia/Karachi" },
+      "lahore": { city: "Lahore", country: "Pakistan", zone: "Asia/Karachi" },
+      "islamabad": { city: "Islamabad", country: "Pakistan", zone: "Asia/Karachi" },
+      "nyc": { city: "New York", country: "United States", zone: "America/New_York" },
+      "new york": { city: "New York", country: "United States", zone: "America/New_York" },
+      "la": { city: "Los Angeles", country: "United States", zone: "America/Los_Angeles" },
+      "los angeles": { city: "Los Angeles", country: "United States", zone: "America/Los_Angeles" },
+      "chicago": { city: "Chicago", country: "United States", zone: "America/Chicago" },
+      "houston": { city: "Houston", country: "United States", zone: "America/Chicago" },
+      "san francisco": { city: "San Francisco", country: "United States", zone: "America/Los_Angeles" },
+      "toronto": { city: "Toronto", country: "Canada", zone: "America/Toronto" },
+      "vancouver": { city: "Vancouver", country: "Canada", zone: "America/Vancouver" },
+      "sydney": { city: "Sydney", country: "Australia", zone: "Australia/Sydney" },
+      "melbourne": { city: "Melbourne", country: "Australia", zone: "Australia/Melbourne" },
+      "perth": { city: "Perth", country: "Australia", zone: "Australia/Perth" }
+    };
 
-function norm(v){return v.toLowerCase().trim();}
+    function loadClocks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return [];
+      }
+    }
 
-function cityFromZone(z){
-return z.split("/").pop().replaceAll("_"," ");
-}
+    function saveClocks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(clocks));
+    }
 
-function find(val){
-const t=norm(val);
+    function normalise(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[.’']/g, "")
+        .replace(/\s+/g, " ");
+    }
 
-if(countryMap[t]) return countryMap[t];
+    function titleCase(value) {
+      return String(value)
+        .replace(/_/g, " ")
+        .replace(/\w\S*/g, word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+    }
 
-if(cityDB[t]) return {city:val,c:"",z:cityDB[t]};
+    function getCountryFromAddress(address) {
+      if (!address) return "";
+      return address.country || address.state || address.region || "";
+    }
 
-const zone=zones.find(z=>cityFromZone(z).toLowerCase().includes(t));
+    function getCityFromAddress(address, fallback) {
+      if (!address) return fallback;
+      return address.city || address.town || address.village || address.municipality || address.county || fallback;
+    }
 
-if(zone) return {city:cityFromZone(zone),c:"",z:zone};
+    async function findClock(query) {
+      const raw = String(query).trim();
+      const typed = normalise(raw);
+      if (!typed) return null;
 
-return null;
-}
+      if (countryShortForms[typed]) {
+        return resolveKnownCapital(countryShortForms[typed]);
+      }
 
-function addClock(){
-const val=document.getElementById("input").value;
-const res=find(val);
+      if (countryCapitalHints[typed]) {
+        return resolveKnownCapital(countryCapitalHints[typed]);
+      }
 
-if(!res){alert("Not found");return;}
+      if (cityOverrides[typed]) {
+        return cityOverrides[typed];
+      }
 
-if(clocks.some(c=>c.z===res.z)) return;
+      const countryResult = await tryResolveCountry(raw);
+      if (countryResult) return countryResult;
 
-clocks.push(res);
-localStorage.setItem(STORAGE,JSON.stringify(clocks));
-render();
-}
+      const cityResult = await geocodeCity(raw);
+      if (cityResult) return cityResult;
 
-function render(){
-const grid=document.getElementById("grid");
-grid.innerHTML="";
+      return null;
+    }
 
-clocks.forEach(c=>{
-const el=document.createElement("div");
-el.className="clock-card";
+    async function resolveKnownCapital(item) {
+      const result = await geocodeCity(item.query);
+      if (result) {
+        result.city = item.capital;
+        result.country = item.label;
+        return result;
+      }
 
-el.innerHTML=`
-<div class="city">${c.city}</div>
-<div class="country">${c.c}</div>
-<div class="time" data-zone="${c.z}"><span>00:00:00</span></div>
-<div class="date" data-date="${c.z}"></div>
-`;
+      return null;
+    }
 
-grid.appendChild(el);
-});
-}
+    async function tryResolveCountry(raw) {
+      try {
+        const url = `https://restcountries.com/v3.1/name/${encodeURIComponent(raw)}?fullText=true`;
+        const response = await fetch(url);
+        if (!response.ok) return null;
 
-function tick(){
-const now=new Date();
+        const data = await response.json();
+        if (!Array.isArray(data) || !data.length) return null;
 
-document.getElementById("mainClock").textContent=
-new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);
+        const country = data[0];
+        const capital = country.capital && country.capital[0];
+        const countryName = country.name && country.name.common;
 
-document.getElementById("localDate").textContent=
-new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}).format(now);
+        if (!capital || !countryName) return null;
 
-const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
-document.getElementById("deviceLine").textContent=tz;
+        const result = await geocodeCity(`${capital}, ${countryName}`);
+        if (!result) return null;
 
-document.querySelectorAll("[data-zone]").forEach(el=>{
-const z=el.dataset.zone;
+        result.city = capital;
+        result.country = countryName;
+        return result;
+      } catch {
+        return null;
+      }
+    }
 
-const time=new Intl.DateTimeFormat("en-GB",{
-timeZone:z,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
-}).format(now);
+    async function geocodeCity(raw) {
+      try {
+        message.textContent = "Searching global city database...";
 
-const parts=new Intl.DateTimeFormat("en-GB",{timeZone:z,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).formatToParts(now);
+        const params = new URLSearchParams({
+          q: raw,
+          format: "jsonv2",
+          addressdetails: "1",
+          limit: "1"
+        });
 
-const h=+parts.find(p=>p.type==="hour").value;
-const m=+parts.find(p=>p.type==="minute").value;
-const s=+parts.find(p=>p.type==="second").value;
+        const url = `https://nominatim.openstreetmap.org/search?${params.toString()}`;
+        const response = await fetch(url, {
+          headers: {
+            "Accept": "application/json"
+          }
+        });
 
-const angle=((h*3600+m*60+s)/86400)*360;
+        if (!response.ok) return null;
 
-el.style.setProperty("--angle", angle+"deg");
-el.querySelector("span").textContent=time;
-});
+        const data = await response.json();
+        if (!Array.isArray(data) || !data.length) return null;
 
-document.querySelectorAll("[data-date]").forEach(el=>{
-el.textContent=new Intl.DateTimeFormat("en-GB",{
-timeZone:el.dataset.date,
-day:"2-digit",month:"short",year:"numeric"
-}).format(now);
-});
-}
+        const place = data[0];
+        const lat = Number(place.lat);
+        const lon = Number(place.lon);
 
-render();
-setInterval(tick,1000);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon) || typeof tzlookup !== "function") return null;
 
-</script>
+        const zone = tzlookup(lat, lon);
+        const city = getCityFromAddress(place.address, raw);
+        const country = getCountryFromAddress(place.address);
+
+        return {
+          city: titleCase(city),
+          country: titleCase(country),
+          zone
+        };
+      } catch {
+        return null;
+      }
+    }
+
+    function formatTime(zone) {
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone: zone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(new Date());
+    }
+
+    function formatDate(zone) {
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone: zone,
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }).format(new Date());
+    }
+
+    function getProgressAngle(zone) {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: zone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).formatToParts(now);
+
+      const hour = Number(parts.find(part => part.type === "hour").value);
+      const minute = Number(parts.find(part => part.type === "minute").value);
+      const second = Number(parts.find(part => part.type === "second").value);
+      return (((hour * 3600) + (minute * 60) + second) / 86400) * 360;
+    }
+
+    async function addClock() {
+      const found = await findClock(searchInput.value);
+
+      if (!found) {
+        message.textContent = "City or country not found. Try another spelling, for example KSA, UAE, USA, Jeddah, or Manchester.";
+        return;
+      }
+
+      const duplicate = clocks.some(clock =>
+        clock.zone === found.zone &&
+        normalise(clock.city) === normalise(found.city) &&
+        normalise(clock.country) === normalise(found.country)
+      );
+
+      if (duplicate) {
+        message.textContent = "This clock is already added.";
+        searchInput.value = "";
+        return;
+      }
+
+      clocks.push(found);
+      saveClocks();
+      searchInput.value = "";
+      message.textContent = `${found.city} added${found.country ? `, ${found.country}` : ""}.`;
+      renderCards();
+      tick();
+    }
+
+    function deleteClock(index) {
+      clocks.splice(index, 1);
+      saveClocks();
+      renderCards();
+      tick();
+    }
+
+    function moveClock(oldIndex, newIndex) {
+      if (oldIndex === null || oldIndex === newIndex) return;
+      const [clock] = clocks.splice(oldIndex, 1);
+      clocks.splice(newIndex, 0, clock);
+      saveClocks();
+      renderCards();
+      tick();
+    }
+
+    function renderCards() {
+      grid.innerHTML = "";
+      emptyState.style.display = clocks.length ? "none" : "block";
+
+      clocks.forEach((clock, index) => {
+        const card = document.createElement("article");
+        card.className = "clock-card";
+        card.draggable = true;
+        card.dataset.index = index;
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="city">${escapeHTML(clock.city)}</div>
+            <div class="country">${escapeHTML(clock.country || clock.zone)}</div>
+            <button class="delete-btn" data-index="${index}">Delete</button>
+          </div>
+          <div class="time" data-zone="${escapeHTML(clock.zone)}"><span>00:00:00</span></div>
+          <div class="date" data-date-zone="${escapeHTML(clock.zone)}">Loading</div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          deleteClock(Number(button.dataset.index));
+        });
+      });
+
+      document.querySelectorAll(".clock-card").forEach(card => {
+        card.addEventListener("dragstart", () => {
+          draggedIndex = Number(card.dataset.index);
+          card.classList.add("dragging");
+        });
+
+        card.addEventListener("dragend", () => {
+          card.classList.remove("dragging");
+          draggedIndex = null;
+        });
+
+        card.addEventListener("dragover", event => event.preventDefault());
+
+        card.addEventListener("drop", event => {
+          event.preventDefault();
+          moveClock(draggedIndex, Number(card.dataset.index));
+        });
+      });
+    }
+
+    function getDeviceLocationLabel() {
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
+      const city = zone.includes("/") ? zone.split("/").pop().replaceAll("_", " ") : zone;
+      return `${titleCase(city)} • ${zone}`;
+    }
+
+    function tick() {
+      const now = new Date();
+
+      localDate.textContent = new Intl.DateTimeFormat("en-GB", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      }).format(now);
+
+      mainClock.textContent = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(now);
+
+      deviceLine.textContent = getDeviceLocationLabel();
+
+      document.querySelectorAll("[data-zone]").forEach(element => {
+        const zone = element.dataset.zone;
+        const angle = getProgressAngle(zone);
+        const span = element.querySelector("span");
+
+        element.style.setProperty("--angle", `${angle}deg`);
+        span.textContent = formatTime(zone);
+      });
+
+      document.querySelectorAll("[data-date-zone]").forEach(element => {
+        element.textContent = formatDate(element.dataset.dateZone);
+      });
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function runTests() {
+      console.assert(countryShortForms.ksa.capital === "Riyadh", "KSA should map to Riyadh.");
+      console.assert(countryShortForms.uae.capital === "Abu Dhabi", "UAE should map to Abu Dhabi.");
+      console.assert(countryShortForms.usa.capital === "Washington, D.C.", "USA should map to Washington, D.C.");
+      console.assert(cityOverrides.jeddah.zone === "Asia/Riyadh", "Jeddah should map to Saudi Arabia timezone.");
+      console.assert(typeof getProgressAngle("Europe/London") === "number", "Progress angle should be numeric.");
+    }
+
+    addBtn.addEventListener("click", addClock);
+    searchInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") addClock();
+    });
+
+    message.textContent = "Global city search ready. Type a country or city.";
+    runTests();
+    renderCards();
+    tick();
+    setInterval(tick, 1000);
+  </script>
 </body>
 </html>
