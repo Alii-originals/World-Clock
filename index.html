@@ -1,800 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>World Clock</title>
-  <style>
-    :root {
-      --page-bg: #f5f9ff;
-      --panel-bg: #ffffff;
-      --card-bg: #ffffff;
-      --text: #0b1a2b;
-      --muted: #6b7a90;
-      --soft-muted: #9fb3c8;
-      --border: #e3eefc;
-      --shadow: 0 10px 25px rgba(0, 102, 204, 0.08);
-      --blue: #2563eb;
-      --blue-soft: rgba(37, 99, 235, 0.12);
-      --ring-track: #e4eefb;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Clock</title>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(219, 234, 254, 0.9), transparent 32%),
-        radial-gradient(circle at top right, rgba(191, 219, 254, 0.55), transparent 34%),
-        var(--page-bg);
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      padding: 30px 16px 56px;
-    }
+<style>
+:root{
+--bg1:#6f8faa;
+--bg2:#8fb3c9;
+--card:#ffffff;
+--text:#0b1a2b;
+--muted:#6b7a90;
+--border:#dbeafe;
+--track:#e5e7eb;
+}
 
-    .app {
-      width: min(1180px, 100%);
-    }
+*{box-sizing:border-box;margin:0;padding:0}
 
-    header {
-      width: min(720px, 100%);
-      margin: 0 auto 32px;
-      padding: 22px 26px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-    }
+body{
+font-family:Inter,system-ui;
+background:linear-gradient(135deg,var(--bg1),var(--bg2));
+display:flex;
+justify-content:center;
+padding:20px;
+color:var(--text);
+}
 
-    .date-line {
-      color: var(--muted);
-      font-size: clamp(18px, 2.2vw, 27px);
-      font-weight: 400;
-      letter-spacing: 0.2px;
-      margin-bottom: 5px;
-      text-transform: none;
-    }
+.app{width:100%;max-width:1100px}
 
-    .main-clock {
-      color: var(--text);
-      font-size: clamp(26px, 4vw, 42px);
-      line-height: 1.2;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      text-shadow: none;
-      margin-top: 6px;
-    }
+header{
+text-align:center;
+margin-bottom:16px;
+}
 
-    .main-clock span.dim {
-      color: var(--text);
-    }
+.title{
+font-family:'Pacifico',cursive;
+font-size:36px;
+color:white;
+margin-bottom:10px;
+}
 
-    .subline {
-      margin-top: 22px;
-      color: var(--text);
-      font-size: clamp(17px, 2vw, 25px);
-      font-weight: 500;
-      letter-spacing: 0.1px;
-      text-transform: none;
-    }
+.header-box{
+background:rgba(255,255,255,0.9);
+padding:14px;
+border-radius:14px;
+border:1px solid var(--border);
+}
 
-    .controls {
-      width: min(720px, 100%);
-      margin: 0 auto 16px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-    }
+.date-line{
+color:var(--muted);
+font-size:14px;
+margin-bottom:4px;
+}
 
-    input, button {
-      min-height: 44px;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: inherit;
-      border-radius: 12px;
-      padding: 10px 12px;
-      outline: none;
-      font-size: 14px;
-      -webkit-appearance: none;
-    }
+.main-clock{
+font-size:30px;
+font-weight:700;
+}
 
-    input::selection {
-      background: rgba(15, 23, 42, 0.12);
-    }
+.subline{
+font-size:13px;
+color:var(--muted);
+}
 
-    input::placeholder {
-      color: var(--soft-muted);
-    }
+.controls{
+display:flex;
+gap:10px;
+background:white;
+padding:10px;
+border-radius:12px;
+border:1px solid var(--border);
+margin-bottom:12px;
+}
 
-    input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px var(--blue-soft);
-    }
+input{
+flex:1;
+padding:10px;
+border-radius:8px;
+border:1px solid var(--border);
+}
 
-    button {
-      cursor: pointer;
-      transition: 0.2s ease;
-      background: var(--text);
-      color: #ffffff;
-      font-weight: 700;
-      white-space: nowrap;
-      border: none;
-    }
+button{
+padding:10px 14px;
+background:#0b1a2b;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
 
-    button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.18);
-    }
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:12px;
+}
 
-    .message {
-      min-height: 20px;
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
-      letter-spacing: 0.1px;
-      margin-bottom: 34px;
-    }
+.clock-card{
+background:white;
+padding:12px;
+border-radius:12px;
+border:1px solid var(--border);
+text-align:center;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
-      gap: 28px;
-      align-items: stretch;
-    }
+.city{font-weight:700;font-size:16px}
+.country{font-size:12px;color:var(--muted)}
 
-    .clock-card {
-      min-height: 310px;
-      background: transparent;
-      border: 0;
-      border-radius: 22px;
-      padding: 0;
-      position: relative;
-      overflow: visible;
-      cursor: grab;
-    }
+.time{
+width:130px;
+height:130px;
+margin:10px auto;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+font-weight:600;
+background:white;
+}
 
-    .clock-card.dragging {
-      opacity: 0.45;
-    }
+.time::before{
+content:"";
+position:absolute;
+inset:0;
+border-radius:50%;
+background:conic-gradient(#000 var(--angle), var(--track) var(--angle));
+}
 
-    .clock-card:active {
-      cursor: grabbing;
-    }
+.time::after{
+content:"";
+position:absolute;
+inset:12px;
+border-radius:50%;
+background:white;
+}
 
-    .city-row {
-      min-height: 78px;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 12px;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
+.time span{
+position:relative;
+z-index:2;
+}
 
-    .city-row > div:first-child {
-      padding: 0 42px;
-    }
-
-    .city {
-      color: var(--text);
-      font-size: 20px;
-      line-height: 1.25;
-      font-weight: 650;
-      letter-spacing: 0.1px;
-      text-transform: none;
-    }
-
-    .country {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 4px;
-      font-weight: 400;
-      letter-spacing: 0;
-    }
-
-    .zone {
-      display: none;
-    }
-
-    .city-row > div:last-child {
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .delete-btn {
-      min-height: 34px;
-      height: 34px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.92);
-      color: var(--blue);
-      padding: 0 10px;
-      font-size: 11px;
-      border-radius: 999px;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
-    }
-
-    .delete-btn:hover {
-      color: #ffffff;
-      background: var(--blue);
-      border-color: var(--blue);
-      transform: translateY(-1px);
-    }
-
-    .time {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 500;
-      position: relative;
-      background: #ffffff;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
-    }
-
-    .time::after {
-      content: "";
-      position: absolute;
-      inset: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(219, 234, 254, 0.95);
-      pointer-events: none;
-    }
-
-    .date {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    .empty {
-      display: none;
-      width: min(760px, 100%);
-      margin: 0 auto;
-      border: 1px dashed var(--border);
-      background: rgba(255, 255, 255, 0.72);
-      border-radius: 18px;
-      padding: 28px;
-      text-align: center;
-      color: var(--muted);
-      letter-spacing: 0.1px;
-      box-shadow: var(--shadow);
-    }
-
-    @media (max-width: 720px) {
-      body {
-        padding: 20px 12px 40px;
-      }
-
-      header {
-        padding: 22px 18px;
-      }
-
-      .controls {
-        grid-template-columns: 1fr;
-      }
-
-      .grid {
-        gap: 34px;
-      }
-
-      .clock-card {
-        min-height: 300px;
-      }
-
-      .time {
-        width: 205px;
-        height: 205px;
-      }
-    }
-  </style>
+.date{
+font-size:12px;
+color:var(--muted);
+margin-top:6px;
+}
+</style>
 </head>
+
 <body>
-  <main class="app">
-    <header>
-      <div class="date-line" id="localDate">Loading</div>
-      <div class="main-clock" id="mainClock">00<span class="dim">:</span>00<span class="dim">:</span>00</div>
-      <div class="subline" id="deviceLine">LOCATION</div>
-    </header>
+<div class="app">
 
-    <section class="controls">
-      <input id="countryInput" type="text" placeholder="Type any country, for example Saudi Arabia" autocomplete="off" />
-      <button id="addBtn">Add Clock</button>
-    </section>
+<header>
+<div class="title">World Clock</div>
 
-    <div class="message" id="message">Loading countries...</div>
+<div class="header-box">
+<div id="localDate" class="date-line"></div>
+<div id="mainClock" class="main-clock"></div>
+<div id="deviceLine" class="subline"></div>
+</div>
+</header>
 
-    <section class="empty" id="emptyState">No clocks added yet.</section>
-    <section class="grid" id="clockGrid"></section>
-  </main>
+<div class="controls">
+<input id="input" placeholder="Type country or city (e.g. KSA or Jeddah)">
+<button onclick="addClock()">Add Clock</button>
+</div>
 
-  <script>
-    const STORAGE_KEY = "savedWorldClocks24h";
+<div id="grid" class="grid"></div>
 
-    const countryInput = document.getElementById("countryInput");
-    const addBtn = document.getElementById("addBtn");
-    const clockGrid = document.getElementById("clockGrid");
-    const emptyState = document.getElementById("emptyState");
-    const mainClock = document.getElementById("mainClock");
-    const localDate = document.getElementById("localDate");
-    const message = document.getElementById("message");
-    const deviceLine = document.getElementById("deviceLine");
-    let draggedIndex = null;
+</div>
 
-    const allCountries = [
-      { country: "Afghanistan", capital: "Kabul", zone: "Asia/Kabul", aliases: ["af"] },
-      { country: "Albania", capital: "Tirana", zone: "Europe/Tirane", aliases: ["al"] },
-      { country: "Algeria", capital: "Algiers", zone: "Africa/Algiers", aliases: ["dz"] },
-      { country: "Andorra", capital: "Andorra la Vella", zone: "Europe/Andorra", aliases: ["ad"] },
-      { country: "Angola", capital: "Luanda", zone: "Africa/Luanda", aliases: ["ao"] },
-      { country: "Antigua and Barbuda", capital: "Saint John's", zone: "America/Antigua", aliases: ["antigua", "ag"] },
-      { country: "Argentina", capital: "Buenos Aires", zone: "America/Argentina/Buenos_Aires", aliases: ["ar"] },
-      { country: "Armenia", capital: "Yerevan", zone: "Asia/Yerevan", aliases: ["am"] },
-      { country: "Australia", capital: "Canberra", zone: "Australia/Sydney", aliases: ["au"] },
-      { country: "Austria", capital: "Vienna", zone: "Europe/Vienna", aliases: ["at"] },
-      { country: "Azerbaijan", capital: "Baku", zone: "Asia/Baku", aliases: ["az"] },
-      { country: "Bahamas", capital: "Nassau", zone: "America/Nassau", aliases: ["the bahamas", "bs"] },
-      { country: "Bahrain", capital: "Manama", zone: "Asia/Bahrain", aliases: ["bh"] },
-      { country: "Bangladesh", capital: "Dhaka", zone: "Asia/Dhaka", aliases: ["bd"] },
-      { country: "Barbados", capital: "Bridgetown", zone: "America/Barbados", aliases: ["bb"] },
-      { country: "Belarus", capital: "Minsk", zone: "Europe/Minsk", aliases: ["by"] },
-      { country: "Belgium", capital: "Brussels", zone: "Europe/Brussels", aliases: ["be"] },
-      { country: "Belize", capital: "Belmopan", zone: "America/Belize", aliases: ["bz"] },
-      { country: "Benin", capital: "Porto-Novo", zone: "Africa/Porto-Novo", aliases: ["bj"] },
-      { country: "Bhutan", capital: "Thimphu", zone: "Asia/Thimphu", aliases: ["bt"] },
-      { country: "Bolivia", capital: "Sucre", zone: "America/La_Paz", aliases: ["bo"] },
-      { country: "Bosnia and Herzegovina", capital: "Sarajevo", zone: "Europe/Sarajevo", aliases: ["bosnia", "ba"] },
-      { country: "Botswana", capital: "Gaborone", zone: "Africa/Gaborone", aliases: ["bw"] },
-      { country: "Brazil", capital: "Brasilia", zone: "America/Sao_Paulo", aliases: ["br"] },
-      { country: "Brunei", capital: "Bandar Seri Begawan", zone: "Asia/Brunei", aliases: ["bn"] },
-      { country: "Bulgaria", capital: "Sofia", zone: "Europe/Sofia", aliases: ["bg"] },
-      { country: "Burkina Faso", capital: "Ouagadougou", zone: "Africa/Ouagadougou", aliases: ["bf"] },
-      { country: "Burundi", capital: "Gitega", zone: "Africa/Bujumbura", aliases: ["bi"] },
-      { country: "Cabo Verde", capital: "Praia", zone: "Atlantic/Cape_Verde", aliases: ["cape verde", "cv"] },
-      { country: "Cambodia", capital: "Phnom Penh", zone: "Asia/Phnom_Penh", aliases: ["kh"] },
-      { country: "Cameroon", capital: "Yaounde", zone: "Africa/Douala", aliases: ["cm"] },
-      { country: "Canada", capital: "Ottawa", zone: "America/Toronto", aliases: ["ca"] },
-      { country: "Central African Republic", capital: "Bangui", zone: "Africa/Bangui", aliases: ["car", "cf"] },
-      { country: "Chad", capital: "N'Djamena", zone: "Africa/Ndjamena", aliases: ["td"] },
-      { country: "Chile", capital: "Santiago", zone: "America/Santiago", aliases: ["cl"] },
-      { country: "China", capital: "Beijing", zone: "Asia/Shanghai", aliases: ["cn", "prc"] },
-      { country: "Colombia", capital: "Bogota", zone: "America/Bogota", aliases: ["co"] },
-      { country: "Comoros", capital: "Moroni", zone: "Indian/Comoro", aliases: ["km"] },
-      { country: "Congo", capital: "Brazzaville", zone: "Africa/Brazzaville", aliases: ["republic of the congo", "cg"] },
-      { country: "Costa Rica", capital: "San Jose", zone: "America/Costa_Rica", aliases: ["cr"] },
-      { country: "Cote d'Ivoire", capital: "Yamoussoukro", zone: "Africa/Abidjan", aliases: ["ivory coast", "ci"] },
-      { country: "Croatia", capital: "Zagreb", zone: "Europe/Zagreb", aliases: ["hr"] },
-      { country: "Cuba", capital: "Havana", zone: "America/Havana", aliases: ["cu"] },
-      { country: "Cyprus", capital: "Nicosia", zone: "Asia/Nicosia", aliases: ["cy"] },
-      { country: "Czech Republic", capital: "Prague", zone: "Europe/Prague", aliases: ["czechia", "cz"] },
-      { country: "Democratic Republic of the Congo", capital: "Kinshasa", zone: "Africa/Kinshasa", aliases: ["dr congo", "drc", "congo kinshasa", "cd"] },
-      { country: "Denmark", capital: "Copenhagen", zone: "Europe/Copenhagen", aliases: ["dk"] },
-      { country: "Djibouti", capital: "Djibouti", zone: "Africa/Djibouti", aliases: ["dj"] },
-      { country: "Dominica", capital: "Roseau", zone: "America/Dominica", aliases: ["dm"] },
-      { country: "Dominican Republic", capital: "Santo Domingo", zone: "America/Santo_Domingo", aliases: ["do"] },
-      { country: "Ecuador", capital: "Quito", zone: "America/Guayaquil", aliases: ["ec"] },
-      { country: "Egypt", capital: "Cairo", zone: "Africa/Cairo", aliases: ["eg"] },
-      { country: "El Salvador", capital: "San Salvador", zone: "America/El_Salvador", aliases: ["sv"] },
-      { country: "Equatorial Guinea", capital: "Malabo", zone: "Africa/Malabo", aliases: ["gq"] },
-      { country: "Eritrea", capital: "Asmara", zone: "Africa/Asmara", aliases: ["er"] },
-      { country: "Estonia", capital: "Tallinn", zone: "Europe/Tallinn", aliases: ["ee"] },
-      { country: "Eswatini", capital: "Mbabane", zone: "Africa/Mbabane", aliases: ["swaziland", "sz"] },
-      { country: "Ethiopia", capital: "Addis Ababa", zone: "Africa/Addis_Ababa", aliases: ["et"] },
-      { country: "Fiji", capital: "Suva", zone: "Pacific/Fiji", aliases: ["fj"] },
-      { country: "Finland", capital: "Helsinki", zone: "Europe/Helsinki", aliases: ["fi"] },
-      { country: "France", capital: "Paris", zone: "Europe/Paris", aliases: ["fr"] },
-      { country: "Gabon", capital: "Libreville", zone: "Africa/Libreville", aliases: ["ga"] },
-      { country: "Gambia", capital: "Banjul", zone: "Africa/Banjul", aliases: ["the gambia", "gm"] },
-      { country: "Georgia", capital: "Tbilisi", zone: "Asia/Tbilisi", aliases: ["ge"] },
-      { country: "Germany", capital: "Berlin", zone: "Europe/Berlin", aliases: ["de"] },
-      { country: "Ghana", capital: "Accra", zone: "Africa/Accra", aliases: ["gh"] },
-      { country: "Greece", capital: "Athens", zone: "Europe/Athens", aliases: ["gr"] },
-      { country: "Grenada", capital: "Saint George's", zone: "America/Grenada", aliases: ["gd"] },
-      { country: "Guatemala", capital: "Guatemala City", zone: "America/Guatemala", aliases: ["gt"] },
-      { country: "Guinea", capital: "Conakry", zone: "Africa/Conakry", aliases: ["gn"] },
-      { country: "Guinea-Bissau", capital: "Bissau", zone: "Africa/Bissau", aliases: ["gw"] },
-      { country: "Guyana", capital: "Georgetown", zone: "America/Guyana", aliases: ["gy"] },
-      { country: "Haiti", capital: "Port-au-Prince", zone: "America/Port-au-Prince", aliases: ["ht"] },
-      { country: "Honduras", capital: "Tegucigalpa", zone: "America/Tegucigalpa", aliases: ["hn"] },
-      { country: "Hungary", capital: "Budapest", zone: "Europe/Budapest", aliases: ["hu"] },
-      { country: "Iceland", capital: "Reykjavik", zone: "Atlantic/Reykjavik", aliases: ["is"] },
-      { country: "India", capital: "New Delhi", zone: "Asia/Kolkata", aliases: ["in"] },
-      { country: "Indonesia", capital: "Jakarta", zone: "Asia/Jakarta", aliases: ["id"] },
-      { country: "Iran", capital: "Tehran", zone: "Asia/Tehran", aliases: ["ir"] },
-      { country: "Iraq", capital: "Baghdad", zone: "Asia/Baghdad", aliases: ["iq"] },
-      { country: "Ireland", capital: "Dublin", zone: "Europe/Dublin", aliases: ["ie"] },
-      { country: "Israel", capital: "Jerusalem", zone: "Asia/Jerusalem", aliases: ["il"] },
-      { country: "Italy", capital: "Rome", zone: "Europe/Rome", aliases: ["it"] },
-      { country: "Jamaica", capital: "Kingston", zone: "America/Jamaica", aliases: ["jm"] },
-      { country: "Japan", capital: "Tokyo", zone: "Asia/Tokyo", aliases: ["jp"] },
-      { country: "Jordan", capital: "Amman", zone: "Asia/Amman", aliases: ["jo"] },
-      { country: "Kazakhstan", capital: "Astana", zone: "Asia/Almaty", aliases: ["kz", "nur-sultan"] },
-      { country: "Kenya", capital: "Nairobi", zone: "Africa/Nairobi", aliases: ["ke"] },
-      { country: "Kiribati", capital: "South Tarawa", zone: "Pacific/Tarawa", aliases: ["ki"] },
-      { country: "Kuwait", capital: "Kuwait City", zone: "Asia/Kuwait", aliases: ["kw"] },
-      { country: "Kyrgyzstan", capital: "Bishkek", zone: "Asia/Bishkek", aliases: ["kg"] },
-      { country: "Laos", capital: "Vientiane", zone: "Asia/Vientiane", aliases: ["lao", "la"] },
-      { country: "Latvia", capital: "Riga", zone: "Europe/Riga", aliases: ["lv"] },
-      { country: "Lebanon", capital: "Beirut", zone: "Asia/Beirut", aliases: ["lb"] },
-      { country: "Lesotho", capital: "Maseru", zone: "Africa/Maseru", aliases: ["ls"] },
-      { country: "Liberia", capital: "Monrovia", zone: "Africa/Monrovia", aliases: ["lr"] },
-      { country: "Libya", capital: "Tripoli", zone: "Africa/Tripoli", aliases: ["ly"] },
-      { country: "Liechtenstein", capital: "Vaduz", zone: "Europe/Vaduz", aliases: ["li"] },
-      { country: "Lithuania", capital: "Vilnius", zone: "Europe/Vilnius", aliases: ["lt"] },
-      { country: "Luxembourg", capital: "Luxembourg", zone: "Europe/Luxembourg", aliases: ["lu"] },
-      { country: "Madagascar", capital: "Antananarivo", zone: "Indian/Antananarivo", aliases: ["mg"] },
-      { country: "Malawi", capital: "Lilongwe", zone: "Africa/Blantyre", aliases: ["mw"] },
-      { country: "Malaysia", capital: "Kuala Lumpur", zone: "Asia/Kuala_Lumpur", aliases: ["my"] },
-      { country: "Maldives", capital: "Male", zone: "Indian/Maldives", aliases: ["mv"] },
-      { country: "Mali", capital: "Bamako", zone: "Africa/Bamako", aliases: ["ml"] },
-      { country: "Malta", capital: "Valletta", zone: "Europe/Malta", aliases: ["mt"] },
-      { country: "Marshall Islands", capital: "Majuro", zone: "Pacific/Majuro", aliases: ["mh"] },
-      { country: "Mauritania", capital: "Nouakchott", zone: "Africa/Nouakchott", aliases: ["mr"] },
-      { country: "Mauritius", capital: "Port Louis", zone: "Indian/Mauritius", aliases: ["mu"] },
-      { country: "Mexico", capital: "Mexico City", zone: "America/Mexico_City", aliases: ["mx"] },
-      { country: "Micronesia", capital: "Palikir", zone: "Pacific/Pohnpei", aliases: ["federated states of micronesia", "fm"] },
-      { country: "Moldova", capital: "Chisinau", zone: "Europe/Chisinau", aliases: ["md"] },
-      { country: "Monaco", capital: "Monaco", zone: "Europe/Monaco", aliases: ["mc"] },
-      { country: "Mongolia", capital: "Ulaanbaatar", zone: "Asia/Ulaanbaatar", aliases: ["mn"] },
-      { country: "Montenegro", capital: "Podgorica", zone: "Europe/Podgorica", aliases: ["me"] },
-      { country: "Morocco", capital: "Rabat", zone: "Africa/Casablanca", aliases: ["ma"] },
-      { country: "Mozambique", capital: "Maputo", zone: "Africa/Maputo", aliases: ["mz"] },
-      { country: "Myanmar", capital: "Naypyidaw", zone: "Asia/Yangon", aliases: ["burma", "mm"] },
-      { country: "Namibia", capital: "Windhoek", zone: "Africa/Windhoek", aliases: ["na"] },
-      { country: "Nauru", capital: "Yaren", zone: "Pacific/Nauru", aliases: ["nr"] },
-      { country: "Nepal", capital: "Kathmandu", zone: "Asia/Kathmandu", aliases: ["np"] },
-      { country: "Netherlands", capital: "Amsterdam", zone: "Europe/Amsterdam", aliases: ["holland", "nl"] },
-      { country: "New Zealand", capital: "Wellington", zone: "Pacific/Auckland", aliases: ["nz"] },
-      { country: "Nicaragua", capital: "Managua", zone: "America/Managua", aliases: ["ni"] },
-      { country: "Niger", capital: "Niamey", zone: "Africa/Niamey", aliases: ["ne"] },
-      { country: "Nigeria", capital: "Abuja", zone: "Africa/Lagos", aliases: ["ng"] },
-      { country: "North Korea", capital: "Pyongyang", zone: "Asia/Pyongyang", aliases: ["korea north", "kp"] },
-      { country: "North Macedonia", capital: "Skopje", zone: "Europe/Skopje", aliases: ["macedonia", "mk"] },
-      { country: "Norway", capital: "Oslo", zone: "Europe/Oslo", aliases: ["no"] },
-      { country: "Oman", capital: "Muscat", zone: "Asia/Muscat", aliases: ["om"] },
-      { country: "Pakistan", capital: "Islamabad", zone: "Asia/Karachi", aliases: ["pk"] },
-      { country: "Palau", capital: "Ngerulmud", zone: "Pacific/Palau", aliases: ["pw"] },
-      { country: "Palestine", capital: "Ramallah", zone: "Asia/Hebron", aliases: ["state of palestine", "ps"] },
-      { country: "Panama", capital: "Panama City", zone: "America/Panama", aliases: ["pa"] },
-      { country: "Papua New Guinea", capital: "Port Moresby", zone: "Pacific/Port_Moresby", aliases: ["png", "pg"] },
-      { country: "Paraguay", capital: "Asuncion", zone: "America/Asuncion", aliases: ["py"] },
-      { country: "Peru", capital: "Lima", zone: "America/Lima", aliases: ["pe"] },
-      { country: "Philippines", capital: "Manila", zone: "Asia/Manila", aliases: ["ph"] },
-      { country: "Poland", capital: "Warsaw", zone: "Europe/Warsaw", aliases: ["pl"] },
-      { country: "Portugal", capital: "Lisbon", zone: "Europe/Lisbon", aliases: ["pt"] },
-      { country: "Qatar", capital: "Doha", zone: "Asia/Qatar", aliases: ["qa"] },
-      { country: "Romania", capital: "Bucharest", zone: "Europe/Bucharest", aliases: ["ro"] },
-      { country: "Russia", capital: "Moscow", zone: "Europe/Moscow", aliases: ["russian federation", "ru"] },
-      { country: "Rwanda", capital: "Kigali", zone: "Africa/Kigali", aliases: ["rw"] },
-      { country: "Saint Kitts and Nevis", capital: "Basseterre", zone: "America/St_Kitts", aliases: ["st kitts", "kn"] },
-      { country: "Saint Lucia", capital: "Castries", zone: "America/St_Lucia", aliases: ["st lucia", "lc"] },
-      { country: "Saint Vincent and the Grenadines", capital: "Kingstown", zone: "America/St_Vincent", aliases: ["st vincent", "vc"] },
-      { country: "Samoa", capital: "Apia", zone: "Pacific/Apia", aliases: ["ws"] },
-      { country: "San Marino", capital: "San Marino", zone: "Europe/San_Marino", aliases: ["sm"] },
-      { country: "Sao Tome and Principe", capital: "Sao Tome", zone: "Africa/Sao_Tome", aliases: ["stp", "são tomé and príncipe", "st"] },
-      { country: "Saudi Arabia", capital: "Riyadh", zone: "Asia/Riyadh", aliases: ["ksa", "sa"] },
-      { country: "Senegal", capital: "Dakar", zone: "Africa/Dakar", aliases: ["sn"] },
-      { country: "Serbia", capital: "Belgrade", zone: "Europe/Belgrade", aliases: ["rs"] },
-      { country: "Seychelles", capital: "Victoria", zone: "Indian/Mahe", aliases: ["sc"] },
-      { country: "Sierra Leone", capital: "Freetown", zone: "Africa/Freetown", aliases: ["sl"] },
-      { country: "Singapore", capital: "Singapore", zone: "Asia/Singapore", aliases: ["sg"] },
-      { country: "Slovakia", capital: "Bratislava", zone: "Europe/Bratislava", aliases: ["sk"] },
-      { country: "Slovenia", capital: "Ljubljana", zone: "Europe/Ljubljana", aliases: ["si"] },
-      { country: "Solomon Islands", capital: "Honiara", zone: "Pacific/Guadalcanal", aliases: ["sb"] },
-      { country: "Somalia", capital: "Mogadishu", zone: "Africa/Mogadishu", aliases: ["so"] },
-      { country: "South Africa", capital: "Pretoria", zone: "Africa/Johannesburg", aliases: ["za"] },
-      { country: "South Korea", capital: "Seoul", zone: "Asia/Seoul", aliases: ["korea south", "republic of korea", "kr"] },
-      { country: "South Sudan", capital: "Juba", zone: "Africa/Juba", aliases: ["ss"] },
-      { country: "Spain", capital: "Madrid", zone: "Europe/Madrid", aliases: ["es"] },
-      { country: "Sri Lanka", capital: "Colombo", zone: "Asia/Colombo", aliases: ["lk"] },
-      { country: "Sudan", capital: "Khartoum", zone: "Africa/Khartoum", aliases: ["sd"] },
-      { country: "Suriname", capital: "Paramaribo", zone: "America/Paramaribo", aliases: ["sr"] },
-      { country: "Sweden", capital: "Stockholm", zone: "Europe/Stockholm", aliases: ["se"] },
-      { country: "Switzerland", capital: "Bern", zone: "Europe/Zurich", aliases: ["ch"] },
-      { country: "Syria", capital: "Damascus", zone: "Asia/Damascus", aliases: ["sy"] },
-      { country: "Tajikistan", capital: "Dushanbe", zone: "Asia/Dushanbe", aliases: ["tj"] },
-      { country: "Tanzania", capital: "Dodoma", zone: "Africa/Dar_es_Salaam", aliases: ["tz"] },
-      { country: "Thailand", capital: "Bangkok", zone: "Asia/Bangkok", aliases: ["th"] },
-      { country: "Timor-Leste", capital: "Dili", zone: "Asia/Dili", aliases: ["east timor", "tl"] },
-      { country: "Togo", capital: "Lome", zone: "Africa/Lome", aliases: ["tg"] },
-      { country: "Tonga", capital: "Nuku'alofa", zone: "Pacific/Tongatapu", aliases: ["to"] },
-      { country: "Trinidad and Tobago", capital: "Port of Spain", zone: "America/Port_of_Spain", aliases: ["tt"] },
-      { country: "Tunisia", capital: "Tunis", zone: "Africa/Tunis", aliases: ["tn"] },
-      { country: "Turkey", capital: "Ankara", zone: "Europe/Istanbul", aliases: ["turkiye", "türkiye", "tr"] },
-      { country: "Turkmenistan", capital: "Ashgabat", zone: "Asia/Ashgabat", aliases: ["tm"] },
-      { country: "Tuvalu", capital: "Funafuti", zone: "Pacific/Funafuti", aliases: ["tv"] },
-      { country: "Uganda", capital: "Kampala", zone: "Africa/Kampala", aliases: ["ug"] },
-      { country: "Ukraine", capital: "Kyiv", zone: "Europe/Kyiv", aliases: ["kiev", "ua"] },
-      { country: "United Arab Emirates", capital: "Abu Dhabi", zone: "Asia/Dubai", aliases: ["uae", "ae"] },
-      { country: "United Kingdom", capital: "London", zone: "Europe/London", aliases: ["uk", "great britain", "britain", "gb"] },
-      { country: "United States", capital: "Washington, D.C.", zone: "America/New_York", aliases: ["usa", "us", "america", "united states of america"] },
-      { country: "Uruguay", capital: "Montevideo", zone: "America/Montevideo", aliases: ["uy"] },
-      { country: "Uzbekistan", capital: "Tashkent", zone: "Asia/Tashkent", aliases: ["uz"] },
-      { country: "Vanuatu", capital: "Port Vila", zone: "Pacific/Efate", aliases: ["vu"] },
-      { country: "Vatican City", capital: "Vatican City", zone: "Europe/Vatican", aliases: ["holy see", "va"] },
-      { country: "Venezuela", capital: "Caracas", zone: "America/Caracas", aliases: ["ve"] },
-      { country: "Vietnam", capital: "Hanoi", zone: "Asia/Ho_Chi_Minh", aliases: ["viet nam", "vn"] },
-      { country: "Yemen", capital: "Sanaa", zone: "Asia/Aden", aliases: ["ye"] },
-      { country: "Zambia", capital: "Lusaka", zone: "Africa/Lusaka", aliases: ["zm"] },
-      { country: "Zimbabwe", capital: "Harare", zone: "Africa/Harare", aliases: ["zw"] }
-    ];
+<script>
 
-    let availableCountries = [];
-    let clocks = loadClocks();
+const STORAGE="clocks_final";
 
-    function loadClocks() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return [];
+/* COUNTRY SHORT FORMS */
+const countryMap={
+"ksa":{c:"Saudi Arabia",city:"Riyadh",z:"Asia/Riyadh"},
+"saudi arabia":{c:"Saudi Arabia",city:"Riyadh",z:"Asia/Riyadh"},
+"uae":{c:"UAE",city:"Abu Dhabi",z:"Asia/Dubai"},
+"united arab emirates":{c:"UAE",city:"Abu Dhabi",z:"Asia/Dubai"},
+"usa":{c:"USA",city:"Washington",z:"America/New_York"},
+"uk":{c:"UK",city:"London",z:"Europe/London"},
+"india":{c:"India",city:"New Delhi",z:"Asia/Kolkata"}
+};
 
-      try {
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
+/* CITY FALLBACK */
+const cityDB={
+"manchester":"Europe/London",
+"birmingham":"Europe/London",
+"jeddah":"Asia/Riyadh",
+"dubai":"Asia/Dubai",
+"mumbai":"Asia/Kolkata",
+"delhi":"Asia/Kolkata",
+"new york":"America/New_York",
+"los angeles":"America/Los_Angeles",
+"chicago":"America/Chicago"
+};
 
-    function saveClocks() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(clocks));
-    }
+const zones=Intl.supportedValuesOf("timeZone");
+let clocks=JSON.parse(localStorage.getItem(STORAGE)||"[]");
 
-    function loadCountries() {
-      availableCountries = [...allCountries].sort((a, b) => a.country.localeCompare(b.country));
-      message.textContent = `${availableCountries.length} countries loaded locally. Type a country name and add its capital clock.`;
-    }
+function norm(v){return v.toLowerCase().trim();}
 
-    function normalise(value) {
-      return String(value)
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[.’']/g, "")
-        .replace(/\s+/g, " ");
-    }
+function cityFromZone(z){
+return z.split("/").pop().replaceAll("_"," ");
+}
 
-    function findCountry(input) {
-      const typed = normalise(input);
-      if (!typed) return null;
+function find(val){
+const t=norm(val);
 
-      return availableCountries.find(item => {
-        const names = [item.country, item.capital, ...(item.aliases || [])].map(normalise);
-        return names.includes(typed);
-      }) || availableCountries.find(item => normalise(item.country).startsWith(typed));
-    }
+if(countryMap[t]) return countryMap[t];
 
-    function getProgressAngle(zone) {
-      const now = new Date();
-      const parts = new Intl.DateTimeFormat("en-GB", {
-        timeZone: zone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }).formatToParts(now);
+if(cityDB[t]) return {city:val,c:"",z:cityDB[t]};
 
-      const h = Number(parts.find(part => part.type === "hour").value);
-      const m = Number(parts.find(part => part.type === "minute").value);
-      const s = Number(parts.find(part => part.type === "second").value);
-      const totalSeconds = (h * 3600) + (m * 60) + s;
+const zone=zones.find(z=>cityFromZone(z).toLowerCase().includes(t));
 
-      return (totalSeconds / 86400) * 360;
-    }
+if(zone) return {city:cityFromZone(zone),c:"",z:zone};
 
-    function formatTime(zone) {
-      return new Intl.DateTimeFormat("en-GB", {
-        timeZone: zone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }).format(new Date());
-    }
+return null;
+}
 
-    function formatDate(zone) {
-      return new Intl.DateTimeFormat("en-GB", {
-        timeZone: zone,
-        weekday: "short",
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      }).format(new Date());
-    }
+function addClock(){
+const val=document.getElementById("input").value;
+const res=find(val);
 
-    function renderCards() {
-      clockGrid.innerHTML = "";
-      emptyState.style.display = clocks.length ? "none" : "block";
+if(!res){alert("Not found");return;}
 
-      clocks.forEach((clock, index) => {
-        const card = document.createElement("article");
-        card.className = "clock-card";
-        card.draggable = true;
-        card.dataset.index = index;
+if(clocks.some(c=>c.z===res.z)) return;
 
-        card.innerHTML = `
-          <div class="city-row">
-            <div>
-              <div class="city">${escapeHTML(clock.capital)}</div>
-              <div class="country">${escapeHTML(clock.country)}</div>
-              <div class="zone">${escapeHTML(clock.zone)}</div>
-            </div>
-            <div>
-              <button class="delete-btn" data-index="${index}">Delete</button>
-            </div>
-          </div>
-          <div class="time" data-zone="${clock.zone}">00:00:00</div>
-          <div class="date" data-date-zone="${clock.zone}">Loading</div>
-        `;
+clocks.push(res);
+localStorage.setItem(STORAGE,JSON.stringify(clocks));
+render();
+}
 
-        clockGrid.appendChild(card);
-      });
+function render(){
+const grid=document.getElementById("grid");
+grid.innerHTML="";
 
-      document.querySelectorAll(".delete-btn").forEach(button => {
-        button.addEventListener("click", () => {
-          const index = Number(button.dataset.index);
-          clocks.splice(index, 1);
-          saveClocks();
-          renderCards();
-          tick();
-        });
-      });
+clocks.forEach(c=>{
+const el=document.createElement("div");
+el.className="clock-card";
 
-      document.querySelectorAll(".clock-card").forEach(card => {
-        card.addEventListener("dragstart", () => {
-          draggedIndex = Number(card.dataset.index);
-          card.classList.add("dragging");
-        });
+el.innerHTML=`
+<div class="city">${c.city}</div>
+<div class="country">${c.c}</div>
+<div class="time" data-zone="${c.z}"><span>00:00:00</span></div>
+<div class="date" data-date="${c.z}"></div>
+`;
 
-        card.addEventListener("dragend", () => {
-          card.classList.remove("dragging");
-          draggedIndex = null;
-        });
+grid.appendChild(el);
+});
+}
 
-        card.addEventListener("dragover", event => {
-          event.preventDefault();
-        });
+function tick(){
+const now=new Date();
 
-        card.addEventListener("drop", event => {
-          event.preventDefault();
-          const targetIndex = Number(card.dataset.index);
-          moveClock(draggedIndex, targetIndex);
-        });
-      });
-    }
+document.getElementById("mainClock").textContent=
+new Intl.DateTimeFormat("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);
 
-    function moveClock(oldIndex, newIndex) {
-      if (oldIndex === null || oldIndex === newIndex) return;
+document.getElementById("localDate").textContent=
+new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}).format(now);
 
-      const [clock] = clocks.splice(oldIndex, 1);
-      clocks.splice(newIndex, 0, clock);
-      saveClocks();
-      renderCards();
-      tick();
-    }
+const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+document.getElementById("deviceLine").textContent=tz;
 
-    function getDeviceLocationLabel() {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Local Time";
-      const city = tz.includes("/") ? tz.split("/").pop().replaceAll("_", " ") : tz;
-      return `${city.toUpperCase()} • ${tz.toUpperCase()}`;
-    }
+document.querySelectorAll("[data-zone]").forEach(el=>{
+const z=el.dataset.zone;
 
-    function tick() {
-      const now = new Date();
-      const localTime = new Intl.DateTimeFormat("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }).format(now);
+const time=new Intl.DateTimeFormat("en-GB",{
+timeZone:z,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
+}).format(now);
 
-      const [hh, mm, ss] = localTime.split(":");
-      mainClock.innerHTML = `${hh}<span class="dim">:</span>${mm}<span class="dim">:</span>${ss}`;
+const parts=new Intl.DateTimeFormat("en-GB",{timeZone:z,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).formatToParts(now);
 
-      localDate.textContent = new Intl.DateTimeFormat("en-GB", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric"
-      }).format(now).toUpperCase();
+const h=+parts.find(p=>p.type==="hour").value;
+const m=+parts.find(p=>p.type==="minute").value;
+const s=+parts.find(p=>p.type==="second").value;
 
-      deviceLine.textContent = getDeviceLocationLabel();
+const angle=((h*3600+m*60+s)/86400)*360;
 
-      document.querySelectorAll("[data-zone]").forEach(el => {
-        const zone = el.dataset.zone;
-        const angle = getProgressAngle(zone);
+el.style.setProperty("--angle", angle+"deg");
+el.querySelector("span").textContent=time;
+});
 
-        el.textContent = formatTime(zone);
-        el.style.background = `
-          radial-gradient(circle, #ffffff 62%, transparent 63%),
-          conic-gradient(#000000 0deg ${angle}deg, var(--ring-track) ${angle}deg 360deg)
-        `;
-      });
+document.querySelectorAll("[data-date]").forEach(el=>{
+el.textContent=new Intl.DateTimeFormat("en-GB",{
+timeZone:el.dataset.date,
+day:"2-digit",month:"short",year:"numeric"
+}).format(now);
+});
+}
 
-      document.querySelectorAll("[data-date-zone]").forEach(el => {
-        el.textContent = formatDate(el.dataset.dateZone);
-      });
-    }
+render();
+setInterval(tick,1000);
 
-    function addClock() {
-      const country = findCountry(countryInput.value);
-
-      if (!country) {
-        message.textContent = "Country not found. Type the country name correctly.";
-        return;
-      }
-
-      const exists = clocks.some(clock => clock.country === country.country && clock.capital === country.capital);
-
-      if (exists) {
-        message.textContent = "This country clock is already added.";
-        return;
-      }
-
-      clocks.push(country);
-      saveClocks();
-      countryInput.value = "";
-      message.textContent = `${country.country} added. Capital city: ${country.capital}.`;
-      renderCards();
-      tick();
-    }
-
-    function escapeHTML(value) {
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function runTests() {
-      console.assert(Array.isArray(allCountries), "Countries list must be an array.");
-      console.assert(allCountries.length === 195, `Expected 195 countries, found ${allCountries.length}.`);
-      console.assert(new Set(allCountries.map(item => item.country)).size === allCountries.length, "Country names must be unique.");
-      console.assert(allCountries.every(item => item.country && item.capital && item.zone), "Every country must have country, capital and zone.");
-      console.assert(findCountry("Saudi Arabia")?.capital === "Riyadh", "Saudi Arabia should map to Riyadh.");
-      console.assert(findCountry("KSA")?.capital === "Riyadh", "KSA alias should map to Riyadh.");
-      console.assert(findCountry("United States")?.capital === "Washington, D.C.", "United States should map to Washington, D.C.");
-      console.assert(findCountry("UK")?.capital === "London", "UK alias should map to London.");
-      console.assert(findCountry("Czechia")?.capital === "Prague", "Czechia alias should map to Prague.");
-    }
-
-    addBtn.addEventListener("click", addClock);
-    countryInput.addEventListener("keydown", event => {
-      if (event.key === "Enter") addClock();
-    });
-
-    loadCountries();
-    runTests();
-    renderCards();
-    tick();
-    setInterval(tick, 1000);
-  </script>
+</script>
 </body>
 </html>
