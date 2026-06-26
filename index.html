@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f4f0" />
   <title>World Clock</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-one: #6f8faa;
-      --bg-two: #8fb3c9;
-      --panel: rgba(255, 255, 255, 0.88);
-      --panel-strong: rgba(255, 255, 255, 0.96);
-      --text: #0b1a2b;
-      --muted: #64748b;
-      --border: rgba(219, 234, 254, 0.9);
-      --track: #e5e7eb;
-      --ring: #050505;
-      --shadow: 0 18px 38px rgba(15, 23, 42, 0.14);
-      --soft-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-      --blue: #2563eb;
-      --blue-soft: rgba(37, 99, 235, 0.14);
+      --bg: #f5f4f0;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --text: #050505;
+      --muted: #66615c;
+      --soft: #a8a39e;
+      --border: rgba(8, 8, 8, 0.07);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.10);
+      --soft-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+      --black: #050505;
+      --danger: #d73f49;
     }
 
     * {
@@ -30,79 +30,187 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
       background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.22), transparent 32%),
-        linear-gradient(135deg, var(--bg-one), var(--bg-two));
+        radial-gradient(circle at 18% 14%, rgba(255,255,255,.95), transparent 28%),
+        radial-gradient(circle at 82% 10%, rgba(255,255,255,.82), transparent 26%),
+        linear-gradient(135deg, #f7f6f2 0%, #eeece7 48%, #f8f7f4 100%);
       color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       display: flex;
       justify-content: center;
-      padding: 24px 16px 48px;
+      padding: 26px 18px 56px;
+      overflow-x: hidden;
     }
 
     .app {
-      width: min(1180px, 100%);
+      width: min(1160px, 100%);
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .brand-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--black);
+      color: #fff;
+      font-size: 20px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.12);
+      flex: 0 0 auto;
+    }
+
+    .top-note {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
 
     .title {
-      font-family: "Pacifico", cursive;
-      color: #ffffff;
+      font-family: "Times New Roman", Times, serif;
+      color: var(--text);
       text-align: center;
-      font-size: clamp(38px, 7vw, 74px);
-      line-height: 1.05;
-      margin: 10px 0 22px;
-      text-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+      font-size: clamp(42px, 7.2vw, 88px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: clamp(0.05em, 1vw, 0.16em);
+      text-transform: uppercase;
+      margin: 6px auto 28px;
+      max-width: 100%;
+      white-space: nowrap;
     }
 
     header {
-      width: min(760px, 100%);
+      width: min(560px, 100%);
       margin: 0 auto 18px;
-      padding: 18px 22px;
+      padding: clamp(22px, 4vw, 34px);
       text-align: center;
-      background: var(--panel);
+      background: var(--surface-strong);
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: 28px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
     }
 
-    .date-line {
+    .hero-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .hero-label-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--black);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .hero-pill,
+    .utc-pill {
+      border-radius: 999px;
+      background: rgba(5,5,5,.06);
       color: var(--muted);
-      font-size: clamp(15px, 2vw, 20px);
-      margin-bottom: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .main-clock {
-      font-size: clamp(30px, 4vw, 46px);
-      font-weight: 800;
-      letter-spacing: -0.8px;
+      font-size: clamp(52px, 9vw, 94px);
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      line-height: 0.95;
+      white-space: nowrap;
+      max-width: 100%;
+    }
+
+    .date-line {
+      color: var(--text);
+      font-size: clamp(15px, 2vw, 20px);
+      font-weight: 850;
+      margin-top: 16px;
+    }
+
+    .hero-rule {
+      width: 72%;
+      height: 1px;
+      margin: 17px auto 15px;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,.14), transparent);
     }
 
     .subline {
-      color: var(--muted);
-      font-size: clamp(13px, 1.7vw, 16px);
+      color: var(--text);
+      font-size: clamp(14px, 1.7vw, 17px);
+      font-weight: 800;
       margin-top: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .format-line {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 16px;
     }
 
     .controls {
-      width: min(820px, 100%);
-      margin: 0 auto 12px;
+      width: min(720px, 100%);
+      margin: 0 auto 14px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
-      padding: 12px;
-      background: var(--panel);
+      padding: 10px;
+      background: var(--surface-strong);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     input, button {
       min-height: 48px;
-      border-radius: 14px;
+      border-radius: 17px;
       font-family: inherit;
       font-size: 15px;
       outline: none;
@@ -110,66 +218,168 @@
 
     input {
       width: 100%;
-      border: 1px solid var(--border);
-      background: #ffffff;
+      border: 0;
+      background: rgba(255,255,255,.9);
       color: var(--text);
-      padding: 11px 14px;
+      padding: 12px 16px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
     }
 
     input::placeholder {
-      color: #94a3b8;
+      color: #8b8782;
     }
 
     input:focus {
-      border-color: #93c5fd;
-      box-shadow: 0 0 0 4px var(--blue-soft);
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.14),
+        0 0 0 5px rgba(0,0,0,.04);
     }
 
     button {
       border: 0;
-      background: #0b1a2b;
+      background: var(--black);
       color: #ffffff;
       padding: 0 18px;
-      font-weight: 700;
+      font-weight: 850;
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
       white-space: nowrap;
     }
 
     button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.15);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
     }
 
     .message {
-      min-height: 22px;
-      color: rgba(255, 255, 255, 0.92);
+      min-height: 24px;
+      color: var(--muted);
       text-align: center;
       font-size: 14px;
-      margin: 12px 0 24px;
-      text-shadow: 0 1px 8px rgba(15, 23, 42, 0.16);
+      font-weight: 750;
+      margin: 14px 0 12px;
+    }
+
+    .map-panel {
+      width: min(980px, 100%);
+      margin: 0 auto 24px;
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      min-height: clamp(180px, 26vw, 310px);
+      background: rgba(255,255,255,.28);
+    }
+
+    .world-map {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      display: block;
+      opacity: .52;
+      filter: grayscale(1);
+    }
+
+    .world-map .land {
+      fill: #a9a7a2;
+    }
+
+    .world-map .line {
+      stroke: rgba(215,63,73,.35);
+      stroke-width: 1.1;
+    }
+
+    .world-map .dot-outer {
+      fill: rgba(5,5,5,.76);
+    }
+
+    .world-map .dot-inner {
+      fill: var(--danger);
+    }
+
+    .map-axis {
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      pointer-events: none;
+    }
+
+    .map-axis span:nth-child(5) {
+      background: var(--black);
+      color: #fff;
+      border-radius: 999px;
+      padding: 5px 10px;
+      margin-top: -5px;
+    }
+
+    .map-baseline {
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      bottom: 47px;
+      height: 1px;
+      background: rgba(0,0,0,.08);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
       align-items: stretch;
     }
 
     .clock-card {
-      background: var(--panel-strong);
+      background: var(--surface-strong);
       border: 1px solid var(--border);
       border-radius: 22px;
-      padding: 16px 12px 18px;
-      text-align: center;
+      padding: 18px;
       box-shadow: var(--soft-shadow);
       cursor: grab;
-      min-height: 286px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      overflow: hidden;
+    }
+
+    .clock-card:nth-child(4n) {
+      background: #080808;
+      color: #fff;
+    }
+
+    .clock-card:nth-child(4n) .country,
+    .clock-card:nth-child(4n) .date,
+    .clock-card:nth-child(4n) .card-footer,
+    .clock-card:nth-child(4n) .day-status {
+      color: rgba(255,255,255,.68);
+    }
+
+    .clock-card:nth-child(4n) .utc-pill {
+      background: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.78);
+    }
+
+    .clock-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 46px rgba(0,0,0,.12);
+      border-color: rgba(0,0,0,.12);
     }
 
     .clock-card.dragging {
       opacity: 0.45;
+      transform: scale(.98);
     }
 
     .clock-card:active {
@@ -177,15 +387,16 @@
     }
 
     .card-top {
-      min-height: 72px;
-      position: relative;
-      padding: 0 52px;
-      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
     }
 
     .city {
-      font-size: 21px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 900;
       line-height: 1.18;
       word-break: break-word;
     }
@@ -193,143 +404,202 @@
     .country {
       color: var(--muted);
       font-size: 14px;
-      margin-top: 4px;
+      font-weight: 650;
+      margin-top: 3px;
       text-transform: capitalize;
       word-break: break-word;
     }
 
-    .delete-btn {
-      position: absolute;
-      right: 0;
-      top: 0;
-      min-height: 32px;
-      padding: 0 10px;
-      border-radius: 999px;
-      background: #ffffff;
-      color: var(--blue);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      box-shadow: none;
-    }
-
-    .delete-btn:hover {
-      background: var(--blue);
-      color: #ffffff;
+    .day-status {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
     }
 
     .time {
-      width: 150px;
-      height: 150px;
-      margin: 8px auto 0;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--text);
-      background: conic-gradient(var(--ring) var(--angle, 0deg), var(--track) var(--angle, 0deg) 360deg);
-    }
-
-    .time::after {
-      content: "";
-      position: absolute;
-      inset: 13px;
-      border-radius: 50%;
-      background: #ffffff;
-      z-index: 1;
+      margin: 0;
+      display: block;
+      font-size: clamp(34px, 4.2vw, 48px);
+      font-weight: 850;
+      color: inherit;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      white-space: nowrap;
     }
 
     .time span {
-      position: relative;
-      z-index: 2;
+      display: block;
     }
 
     .date {
       color: var(--muted);
       font-size: 13px;
-      margin-top: 12px;
+      font-weight: 650;
+      margin-top: 10px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .delete-btn {
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(5,5,5,.06);
+      color: inherit;
+      border: 1px solid rgba(0,0,0,.06);
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .clock-card:nth-child(4n) .delete-btn {
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.1);
+      color: rgba(255,255,255,.9);
+    }
+
+    .delete-btn:hover {
+      background: var(--danger);
+      color: #ffffff;
+      box-shadow: none;
     }
 
     .empty {
       display: none;
-      width: min(760px, 100%);
+      width: min(560px, 100%);
       margin: 0 auto;
-      background: var(--panel);
-      border: 1px dashed var(--border);
-      border-radius: 20px;
-      padding: 28px;
+      background: var(--surface-strong);
+      border: 1px dashed rgba(0,0,0,.12);
+      border-radius: 22px;
+      padding: 26px;
       text-align: center;
       color: var(--muted);
+      font-weight: 750;
       box-shadow: var(--soft-shadow);
     }
 
-    @media (min-width: 1000px) {
-      .grid {
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 14px;
-      }
-
-      .clock-card {
-        min-height: 270px;
-        padding: 14px 10px 16px;
-      }
-
-      .time {
-        width: 138px;
-        height: 138px;
-        font-size: 24px;
-      }
-    }
-
-    @media (max-width: 700px) {
+    @media (max-width: 760px) {
       body {
-        padding: 16px 12px 40px;
+        padding: 18px 12px 42px;
+      }
+
+      .top-note {
+        display: none;
       }
 
       .title {
-        margin-top: 4px;
-        margin-bottom: 16px;
+        font-size: clamp(34px, 11vw, 54px);
+        letter-spacing: .08em;
+        margin-bottom: 20px;
       }
 
       header {
-        padding: 16px;
+        border-radius: 24px;
+      }
+
+      .main-clock {
+        font-size: clamp(46px, 15vw, 66px);
+        letter-spacing: -0.075em;
       }
 
       .controls {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
+        border-radius: 20px;
       }
 
-      button {
-        width: 100%;
+      .controls button {
+        width: 54px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .controls button::before {
+        content: "+";
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .map-panel {
+        min-height: 210px;
+        margin-bottom: 18px;
+      }
+
+      .world-map {
+        width: 140%;
+        margin-left: -20%;
+      }
+
+      .map-axis span:nth-child(even) {
+        display: none;
       }
 
       .grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
 
       .clock-card {
-        min-height: 278px;
+        min-height: 150px;
+        border-radius: 18px;
       }
 
       .time {
-        width: 148px;
-        height: 148px;
-        font-size: 25px;
+        font-size: clamp(32px, 12vw, 44px);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .title {
+        white-space: normal;
+      }
+
+      .hero-label {
+        font-size: 12px;
+      }
+
+      .format-line {
+        font-size: 13px;
+      }
+
+      input {
+        font-size: 13px;
       }
     }
   </style>
 </head>
 <body>
   <main class="app">
+    <div class="topbar">
+      <div class="brand-dot" aria-hidden="true">◉</div>
+      <div class="top-note">Global city search • Live local time</div>
+      <div class="brand-dot" aria-hidden="true">◎</div>
+    </div>
+
     <div class="title">World Clock</div>
 
     <header>
-      <div class="date-line" id="localDate">Loading date</div>
+      <div class="hero-label">
+        <div class="hero-label-left">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Local Time</span>
+        </div>
+        <span class="hero-pill">UTC</span>
+      </div>
       <div class="main-clock" id="mainClock">00:00:00</div>
+      <div class="date-line" id="localDate">Loading date</div>
+      <div class="hero-rule"></div>
       <div class="subline" id="deviceLine">Loading location</div>
+      <div class="format-line">24-hour format • Live local time</div>
     </header>
 
     <section class="controls">
@@ -338,6 +608,29 @@
     </section>
 
     <div class="message" id="message">Loading global city search...</div>
+
+    <section class="map-panel" aria-label="World map background">
+      <svg class="world-map" viewBox="0 0 1000 430" role="img" aria-label="Subtle world map">
+        <path class="land" d="M122 126l38-28 49-9 33 11 24-7 39 12 18 27-10 36-34 16-23 31-41 4-28 31-42-7-15-31-31-10-10-38z"/>
+        <path class="land" d="M238 252l33 14 29 39-2 39-22 49-34-10-22-48-24-40 12-29z"/>
+        <path class="land" d="M366 112l35-16 42 7 35-12 51 18 20 31-28 20-46-6-29 18-47-8-37 12-22-25z"/>
+        <path class="land" d="M464 190l38-19 47 8 39 38 36 7 28 38-9 51-28 49-38-13-30-52-43-24-32-37z"/>
+        <path class="land" d="M574 129l42-35 78-7 57 21 42-2 54 24 30 43-19 34-64-11-53 14-53-20-47 19-54-13-33 14-45-23 10-35z"/>
+        <path class="land" d="M739 239l45-19 50 10 42 41-8 34-48 11-39-17-42 11-28-28z"/>
+        <path class="land" d="M807 322l35 12 24 30-10 24-41-3-27-21z"/>
+        <path class="land" d="M662 318l28 8 15 27-14 30-27-12-13-29z"/>
+        <path class="land" d="M424 63l31-17 42 9 13 23-37 11-44-3z"/>
+        <path class="land" d="M706 64l37-20 55 6 33 22-30 22-52-8z"/>
+        <path class="line" d="M500 72v300"/>
+        <circle class="dot-outer" cx="500" cy="218" r="15"/>
+        <circle class="dot-inner" cx="500" cy="218" r="5"/>
+      </svg>
+      <div class="map-baseline"></div>
+      <div class="map-axis" aria-hidden="true">
+        <span>UTC -8</span><span>UTC -6</span><span>UTC -4</span><span>UTC -2</span><span>UTC 0</span><span>UTC +2</span><span>UTC +4</span><span>UTC +6</span><span>UTC +8</span>
+      </div>
+    </section>
+
     <section class="empty" id="emptyState">No clocks added yet.</section>
     <section class="grid" id="grid"></section>
   </main>
@@ -346,6 +639,7 @@
 
   <script>
     const STORAGE_KEY = "world_clock_global_v1";
+    const MAX_CLOCKS = 20;
 
     const searchInput = document.getElementById("searchInput");
     const addBtn = document.getElementById("addBtn");
@@ -570,7 +864,9 @@
         return {
           city: titleCase(city),
           country: titleCase(country),
-          zone
+          zone,
+          lat,
+          lon
         };
       } catch {
         return null;
@@ -633,6 +929,11 @@
         return;
       }
 
+      if (clocks.length >= MAX_CLOCKS) {
+        message.textContent = `You have reached the maximum of ${MAX_CLOCKS} clocks. Remove one before adding another.`;
+        return;
+      }
+
       clocks.push(found);
       saveClocks();
       searchInput.value = "";
@@ -669,12 +970,19 @@
 
         card.innerHTML = `
           <div class="card-top">
-            <div class="city">${escapeHTML(clock.city)}</div>
-            <div class="country">${escapeHTML(clock.country || clock.zone)}</div>
-            <button class="delete-btn" data-index="${index}">Delete</button>
+            <div>
+              <div class="city">${escapeHTML(clock.city)}</div>
+              <div class="country">${escapeHTML(clock.country || clock.zone)}</div>
+            </div>
+            <span class="utc-pill" data-utc-zone="${escapeHTML(clock.zone)}">UTC</span>
           </div>
+          <div class="day-status" data-day-zone="${escapeHTML(clock.zone)}">Local time</div>
           <div class="time" data-zone="${escapeHTML(clock.zone)}"><span>00:00:00</span></div>
           <div class="date" data-date-zone="${escapeHTML(clock.zone)}">Loading</div>
+          <div class="card-footer">
+            <span>${escapeHTML(clock.zone)}</span>
+            <button class="delete-btn" data-index="${index}" aria-label="Delete ${escapeHTML(clock.city)}">Delete</button>
+          </div>
         `;
 
         grid.appendChild(card);
@@ -705,6 +1013,32 @@
           moveClock(draggedIndex, Number(card.dataset.index));
         });
       });
+    }
+
+    function getUTCOffsetLabel(zone) {
+      try {
+        const parts = new Intl.DateTimeFormat("en-GB", {
+          timeZone: zone,
+          timeZoneName: "shortOffset"
+        }).formatToParts(new Date());
+        const value = parts.find(part => part.type === "timeZoneName").value;
+        return value.replace("GMT", "UTC");
+      } catch {
+        return "UTC";
+      }
+    }
+
+    function getDayStatus(zone) {
+      try {
+        const hour = Number(new Intl.DateTimeFormat("en-GB", {
+          timeZone: zone,
+          hour: "2-digit",
+          hour12: false
+        }).format(new Date()));
+        return hour >= 6 && hour < 18 ? "Day" : "Night";
+      } catch {
+        return "Local time";
+      }
     }
 
     function getDeviceLocationLabel() {
@@ -744,6 +1078,14 @@
       document.querySelectorAll("[data-date-zone]").forEach(element => {
         element.textContent = formatDate(element.dataset.dateZone);
       });
+
+      document.querySelectorAll("[data-utc-zone]").forEach(element => {
+        element.textContent = getUTCOffsetLabel(element.dataset.utcZone);
+      });
+
+      document.querySelectorAll("[data-day-zone]").forEach(element => {
+        element.textContent = getDayStatus(element.dataset.dayZone);
+      });
     }
 
     function escapeHTML(value) {
@@ -768,7 +1110,7 @@
       if (event.key === "Enter") addClock();
     });
 
-    message.textContent = "Global city search ready. Type a country or city.";
+    message.textContent = `Global city search ready. You can add up to ${MAX_CLOCKS} clocks.`;
     runTests();
     renderCards();
     tick();
